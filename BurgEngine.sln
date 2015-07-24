@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelImporter_Exporter", "ModelImporter_Exporter\ModelImporter_Exporter.vcxproj", "{DE7A84C3-4A17-41CA-830E-610DC542C3A8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BurgEngine", "BurgEngine\BurgEngine.vcxproj", "{FCA89116-A330-4469-AF80-122A75FD62E5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE7A84C3-4A17-41CA-830E-610DC542C3A8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DE7A84C3-4A17-41CA-830E-610DC542C3A8}.Debug|Win32.Build.0 = Debug|Win32
+		{DE7A84C3-4A17-41CA-830E-610DC542C3A8}.Release|Win32.ActiveCfg = Release|Win32
+		{DE7A84C3-4A17-41CA-830E-610DC542C3A8}.Release|Win32.Build.0 = Release|Win32
+		{FCA89116-A330-4469-AF80-122A75FD62E5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FCA89116-A330-4469-AF80-122A75FD62E5}.Debug|Win32.Build.0 = Debug|Win32
+		{FCA89116-A330-4469-AF80-122A75FD62E5}.Release|Win32.ActiveCfg = Release|Win32
+		{FCA89116-A330-4469-AF80-122A75FD62E5}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
