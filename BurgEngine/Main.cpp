@@ -115,7 +115,7 @@ int main()
 	SpotLight spotLight(lightingShader, MainCamera.Position, MainCamera.Front, vect3(255, 255, 255), 1.0f);
 
 	GLfloat time = glfwGetTime();
-	Model nanosuit("../Data/Models/Cute/OutPutModel.txt");
+	Model nanosuit("../Data/Models/Box/OutPutModel.txt");
 	time = glfwGetTime() - time;
 	printf("Time to load: %f", time);
 

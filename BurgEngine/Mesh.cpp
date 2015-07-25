@@ -11,26 +11,10 @@ Mesh::Mesh()
 {
 }
 
-//Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<GLuint> &indices, std::vector<Texture> &textures)
-//{
-//	mVertices = vertices;
-//	mIndices = indices;
-//	mTextures = textures;
-//
-//	SetupMesh();
-//}
-
 void Mesh::Destroy()
 {
-	//SafeDeleteArray(mVertices);
-	delete[] mVertices;
-	mVertices = nullptr;
-
+	SafeDeleteArray(mVertices);
 	SafeDeleteArray(mIndices);
-
-	//if (mNumTextures <= 1)
-	//	SafeDelete(mTextures);
-	//else
 	SafeDeleteArray(mTextures);
 
 	mNumVertices = 0;
@@ -83,7 +67,7 @@ void Mesh::Draw(Shader &shader)
 			number = std::to_string(specularNr++);		
 
 
-		glUniform1f(glGetUniformLocation(shader.Program, ("material." + name + number).c_str()), i);
+		glUniform1i(glGetUniformLocation(shader.Program, ("material." + name + number).c_str()), i);
 		glBindTexture(GL_TEXTURE_2D, mTextures[i].id);
 	}
 	glUniform1f(glGetUniformLocation(shader.Program, "material.shininess"), 25.0f);
