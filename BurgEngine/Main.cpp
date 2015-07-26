@@ -85,10 +85,6 @@ int main()
 	glfwSetScrollCallback(window, scroll_callback);
 
 
-	//// Build and compile our shader program
-	//Shader lightingShader("../Data/Shaders/vertexShaderLighting_nano.vs",
-	//	"../Data/Shaders/fragmentShaderLighting_nano.frag", 2);
-
 	// Build and compile our shader program
 	Shader lightingShader("../Data/Shaders/vertexShaderLighting_nano.vs",
 		"../Data/Shaders/fragmentShaderLighting_nano.frag", 2);
@@ -206,7 +202,6 @@ int main()
 	// =======================================================
 	
 	glfwTerminate();
-	//_CrtDumpMemoryLeaks();
 	return 0;
 }
 
