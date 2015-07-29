@@ -32,6 +32,9 @@
     </ClInclude>
     <ClInclude Include="Math.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Bone.h">
+      <Filter>ModelLoading</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Lighting">

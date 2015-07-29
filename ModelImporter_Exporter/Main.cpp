@@ -3,8 +3,15 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "Model.h"
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include <fstream>
+
+#include "Common.h"
+#include "Model.h"
+#include "Bone.h"
 
 
 enum WriteMode
@@ -13,14 +20,17 @@ enum WriteMode
 	wDebug,
 };
 
-void LoadModel(char* path, WriteMode writeMode);
+void LoadModel(char* path, WriteMode writeMode, Model& model);
 
 void main()
 {
-	LoadModel("../Data/Models/Nanosuit/Nanosuit.obj", wDebug);
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+	Model model;
+	LoadModel("../Data/Models/Nanosuit/Nanosuit.obj", wDebug, model);
 }
 
-void LoadModel(char* path, WriteMode writeMode)
+void LoadModel(char* path, WriteMode writeMode, Model& model)
 {
 	bool dFlag = (writeMode == wDebug);
 	
@@ -54,6 +64,7 @@ void LoadModel(char* path, WriteMode writeMode)
 		for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 		{
 			aiMesh* aiMesh = scene->mMeshes[meshIndex];
+			Mesh* mesh = new Mesh();
 
 			// Vertices
 			if (dFlag)
@@ -96,6 +107,50 @@ void LoadModel(char* path, WriteMode writeMode)
 				}
 			}
 
+			if (aiMesh->HasBones())
+			{
+				VertexWeights& vertexWeights = mesh->GetVertexWeights();
+				vertexWeights.resize(aiMesh->mNumVertices);
+
+				for (u32 i = 0; i < aiMesh->mNumBones; ++i)
+				{
+					aiBone* aiBone = aiMesh->mBones[i];
+					u32 boneIndex = 0;
+
+					// see if we have already added this bone
+					auto iter = model.mBoneIndexMap.find(aiBone->mName.C_Str());
+					if (iter != model.mBoneIndexMap.end())
+					{
+						boneIndex = iter->second;
+					}
+					else
+					{
+						// Gather data for bone information
+						boneIndex = model.mBones.size();
+						Bone* newBone = new Bone();
+						ASSERT(aiBone->mName.length > 0, "Bone %d doesn't have a name", boneIndex);
+						newBone->name = aiBone->mName.C_Str();
+						newBone->index = boneIndex;
+
+						//TODO: check that this actually works
+						newBone->offsetTransform = *(glm::mat4x4*)&aiBone->mOffsetMatrix;
+						
+						// Push data back into model for later writing
+						model.mBones.push_back(newBone);
+						model.mBoneIndexMap.insert(std::make_pair(aiBone->mName.C_Str(), boneIndex));
+					}
+
+					for (u32 j = 0; j < aiBone->mNumWeights; ++j)
+					{
+						aiVertexWeight& aiVertexweight = aiBone->mWeights[j];
+						BoneWeight weight;
+						weight.boneIndex = boneIndex;
+						weight.weight = aiVertexweight.mWeight;
+						vertexWeights[aiVertexweight.mVertexId].push_back(weight);
+					}
+				}
+			}
+
 			unsigned int numDiffuseTextures = 0;
 			unsigned int numSpecularTextures = 0;
 			if (scene->HasMaterials())
@@ -121,8 +176,7 @@ void LoadModel(char* path, WriteMode writeMode)
 					{
 						++numSpecularTextures;
 					}
-				}
-			
+				}			
 
 				// Write number of diffuse/specular textures
 				if (dFlag)
@@ -157,8 +211,37 @@ void LoadModel(char* path, WriteMode writeMode)
 					}
 				}
 			}
+
+			delete mesh;
+		}
+		u32 numBones = model.mBones.size();
+		if (dFlag)
+		outFile << "Num Bones: ";
+		outFile << numBones << std::endl;
+		for (u32 i = 0; i < numBones; ++i)
+		{
+			// name
+			outFile << model.mBones[i]->name << std::endl;
+
+			// parent index
+			outFile << model.mBones[i]->parentIndex << std::endl;
+
+			// children indices
+			u32 childrenNum = model.mBones[i]->children.size();
+			outFile << childrenNum << std::endl;
+			for (u32 j = 0; j < childrenNum; ++j)
+			{
+				outFile << model.mBones[i]->children[j]->index << std::endl;
+			}
+		}
+
+
+		for (u32 i = 0; i < numBones; ++i)
+		{
+			delete model.mBones[i];
 		}
 	}
+
 
 	
 	printf("Done.\n");

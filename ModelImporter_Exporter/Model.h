@@ -8,26 +8,35 @@
 // SOIL
 #include <SOIL/SOIL.h>
 // Other
+#include <fstream>
+#include <map>
+#include <vector>
 #include "Mesh.h"
+#include "Math.h"
+#include "Bone.h"
 
+// Class declaration
 class Model
 {
 public:
-	Model(GLchar* path);
-	void Draw(Shader& shader);
-	void Translate(glm::vec3 transBy);
-	void SetPosition(glm::vec3 transTo);
-	void Rotate(float angle, glm::vec3 rot);
+	Model()
+	{}
 
-private:
-	void LoadModel(std::string path);
-	void ProcessNode(aiNode* node, const aiScene* scene);
-	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-	std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
-	std::vector<Mesh> mMeshes;
-	std::vector<Texture> mTexturesLoaded;
+	Model(char* path);
+	~Model();
+	void Unload();
+
+public:
+	std::vector<Mesh*> mMeshes;
+	std::vector<GLuint> mIndices;
+	std::vector<Texture*> mTexturesLoaded;
 	std::string mDirectory;
+
+	Bone* mRoot;
+	std::vector<Bone*> mBones;
+	std::map<std::string, u32> mBoneIndexMap;
+
 	glm::vec3 mPosition;
 	glm::vec3 mRotation;
 	float mRotAngle;

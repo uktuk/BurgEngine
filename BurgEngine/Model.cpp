@@ -6,7 +6,13 @@
 GLint TextureFromFile(const char* path, std::string &directory);
 
 Model::Model(GLchar* path)
-	: mPosition(glm::vec3(0.0f, 0.0f, 0.0f))
+	: mMeshes(NULL)
+	, mIndices(NULL)
+	, mTexturesLoaded(NULL)
+	, mDirectory(NULL)
+	, mRoot(nullptr)
+	, mBones(NULL)
+	, mPosition(glm::vec3(0.0f, 0.0f, 0.0f))
 	, mRotation(glm::vec3(1.0f, 0.0f, 0.0f))
 	, mRotAngle(0.0f)
 {

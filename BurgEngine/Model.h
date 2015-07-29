@@ -9,11 +9,15 @@
 #include <SOIL/SOIL.h>
 // Other
 #include <fstream>
+#include <map>
 #include "Mesh.h"
 #include "Math.h"
 #include "Common.h"
 
+// Foward delcarations
+struct Bone;
 
+// Class declaration
 class Model
 {
 public:
@@ -27,13 +31,18 @@ public:
 	void SetPosition(glm::vec3 transTo);
 	void Rotate(float angle, glm::vec3 rot);
 
-private:
+public:
 	void LoadMaterialTextures(std::vector<Texture*>& textureData, char* path, aiTextureType type, std::string typeName);
 
 	std::vector<Mesh*> mMeshes;
 	std::vector<GLuint> mIndices;
 	std::vector<Texture*> mTexturesLoaded;
 	std::string mDirectory;
+
+	Bone* mRoot;
+	std::vector<Bone*> mBones;
+	std::map<std::string, u32> mBoneIndexMap;
+
 	glm::vec3 mPosition;
 	glm::vec3 mRotation;
 	float mRotAngle;

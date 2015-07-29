@@ -2,7 +2,10 @@
 #define __COMMON_H
 
 //#include <debugapi.h>
+#include <Windows.h>
 #include <memory.h>
+#include <string>
+#include <vector>
 
 //===========================================================
 //                     TYPEDEFS
